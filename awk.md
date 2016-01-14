@@ -140,12 +140,12 @@ average is: 1.20086
 # 字段的处理
 # 字段匹配
 # 内置函数
-    - length 把参数值当做字符串所占有的长度,如果没有指定参数默认为当前记录的总长度
-    - srand 设置随机谁的种子
-    - rand 返回0~1之间的一个随机数
-    - int 转换字符串成数值类型
-    - substr(s, m, n)
-    - index(s, t)
-    - match(s, r)
-    - split(s, a, fs)
-    - sub(r, t, s)
+- length 把参数值当做字符串所占有的长度,如果没有指定参数默认为当前记录的总长度
+- srand 设置随机谁的种子
+- rand 返回0~1之间的一个随机数
+- int 转换字符串成数值类型
+- substr(s, m, n)
+- index(s, t)
+- match(s, r)
+- split(s, a, fs)
+- sub(r, t, s)
