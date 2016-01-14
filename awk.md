@@ -139,6 +139,23 @@ average is: 1.20086
 
 # 字段的处理
 # 字段匹配
+
+# 内置常量
+- CONVFMT
+- FS 字段分隔符，值是一个正则表达式
+- NF 当前记录的字段总个数
+- NR 当前记录的顺序号
+- FNR 当前记录位于当前文件的顺序号，处理多个文件的时候有用
+- FILENAME 当前文件名
+- RS 记录分隔符，默认为换行符
+- OFS 指定以怎样的分隔符为输出数据的字段分隔符，默认为空格
+- ORS 输出记录分隔符，默认为换行
+- OFMT 输出顺序号的格式,默认为 0.6g
+- SUBSEP
+- ARGC
+- ARGV
+- ENVIRON
+
 # 内置函数
 - length 把参数值当做字符串所占有的长度,如果没有指定参数默认为当前记录的总长度
 - srand 设置随机谁的种子
@@ -149,3 +166,9 @@ average is: 1.20086
 - match(s, r)
 - split(s, a, fs)
 - sub(r, t, s)
+- gsub
+- sprintf
+- system(cmd)
+- tolower(str)
+- toupper(str)
+
