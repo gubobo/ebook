@@ -106,14 +106,17 @@ BBB 222
 CCC 333
 DDD 444
 ```
-这里我们使用到了AWK支持的两个参数FS和RS。FS是field separator的缩写，称为字段分隔符。 RS是recod separator的缩写，称为记录分隔符。
+这里我们使用到了AWK支持的两个参数FS和RS。FS是field separator的缩写，称为字段分隔符。 
+RS是recod separator的缩写，称为记录分隔符。
 
-所以对于数据的解读，取决于我们对于记录分隔符和字段分隔符的定义。只需要把规则告诉AWK,它就能给你想要的。
+所以对于数据的解读，取决于我们对于记录分隔符和字段分隔符的定义。
+只需要把规则告诉AWK,它就能给你想要的。
 
 在AWK的处理过程中，我们可以通过`$0`来表示当前记录，用$1代表第一个字段，一直到$n,n就是当前记录的字段总数。
 
 # awk处理流程
-awk处理的大致流程，就是以记录分隔符将文本切分成记录，然后再对每条记录以字段分隔符为准，切分成字段，再把这些值转换成变量给到程序处理。
+awk处理的大致流程，就是以记录分隔符将文本切分成记录，
+然后再对每条记录以字段分隔符为准，切分成字段，再把这些值转换成变量给到程序处理。
 
 经过AWK的处理处理之后，`$0`代表的就是整个单条的记录，`$1~$n`代表的就是当前行的字段，`$n`表示当前行的最后一个字段值。
 AWK重复的执行代码，输入就是每行，一直到最后一条记录。
@@ -156,7 +159,7 @@ tcp4       0      0  192.168.1.103.49779    209.20.75.76.80        CLOSE_WAIT%
 # 字段的处理
 获取所有的本地打开的端口以及端口的连接状态。
 ```
-$ cat tcp.txt|awk '{print substr($4,15), $6;}'
+$ cat awk/tcp.txt|awk '{print substr($4,15), $6;}'
 50660 FIN_WAIT_1
 50655 SYN_SENT
 50654 SYN_SENT
@@ -172,36 +175,61 @@ $ cat tcp.txt|awk '{print substr($4,15), $6;}'
 ```
 
 # 表达式
+AWK的表达式由两`pattern`和`action`组成，`pattern { action } `组成。
+省略`pattern`表示匹配所有行，`{action}`是可以省略的，表示打印整个行。
+
+pattern-action直接可以通过换行或分号进行分割。
+
+`action`表示的是一个表达式序列，一个表达式可以由以下部分组成：
+```
+if( expression ) statement [ else statement ]
+while( expression ) statement
+for( expression ; expression ; expression ) statement
+for( var in array ) statement
+do statement while( expression )
+break
+continue
+{ [ statement ... ] }
+expression              # commonly var = expression
+print [ expression-list ] [ > expression ]
+printf format [ , expression-list ] [ > expression ]
+return [ expression ]
+next                    # skip remaining patterns on this input line
+nextfile                # skip rest of this file, open next, start at top
+delete array[ expression ]# delete an array element
+delete array            # delete all elements of array
+exit [ expression ]     # exit immediately; status is expression
+```
 
 # 内置常量
 - `CONVFMT`
 - `FS` 字段分隔符，值是一个正则表达式
 - `NF` 当前记录的字段总个数
-- `NR`    --- 当前记录的顺序号
-- FNR   --- 当前记录位于当前文件的顺序号，处理多个文件的时候有用
-- FILENAME 当前文件名
-- RS    --- 记录分隔符，默认为换行符
-- OFS   --- 指定以怎样的分隔符为输出数据的字段分隔符，默认为空格
-- ORS   --- 输出记录分隔符，默认为换行
-- OFMT 输出顺序号的格式,默认为 0.6g
-- SUBSEP
-- ARGC
-- ARGV
-- ENVIRON
+- `NR`  当前记录的顺序号
+- `FNR` 当前记录位于当前文件的顺序号，处理多个文件的时候有用
+- `FILENAME`    当前文件名
+- `RS`  记录分隔符，默认为换行符
+- `OFS` 指定以怎样的分隔符为输出数据的字段分隔符，默认为空格
+- `ORS` 输出记录分隔符，默认为换行
+- `OFMT` 输出顺序号的格式,默认为 0.6g
+- `SUBSEP`
+- `ARGC`
+- `ARGV`
+- `ENVIRON`
 
 # 内置函数
-- length 把参数值当做字符串所占有的长度,如果没有指定参数默认为当前记录的总长度
-- srand 设置随机谁的种子
-- rand 返回0~1之间的一个随机数
-- int 转换字符串成数值类型
-- substr(s, m, n)
-- index(s, t)
-- match(s, r)
-- split(s, a, fs)
-- sub(r, t, s)
-- gsub
-- sprintf
-- system(cmd)
-- tolower(str)
-- toupper(str)
+- `length` 把参数值当做字符串所占有的长度,如果没有指定参数默认为当前记录的总长度
+- `srand` 设置随机谁的种子
+- `rand` 返回0~1之间的一个随机数
+- `int` 转换字符串成数值类型
+- `substr(s, m, n)`
+- `index(s, t)`
+- `match(s, r)`
+- `split(s, a, fs)`
+- `sub(r, t, s)`
+- `gsub`
+- `sprintf`
+- `system(cmd)`
+- `tolower(str)`
+- `toupper(str)`
 
