@@ -174,32 +174,45 @@ $ cat awk/tcp.txt|awk '{print substr($4,15), $6;}'
 49779 CLOSE_WAIT
 ```
 
-# 表达式
-AWK的表达式由两`pattern`和`action`组成，`pattern { action } `组成。
-省略`pattern`表示匹配所有行，`{action}`是可以省略的，表示打印整个行。
+# 表达式和语句
+AWK的程序由两部分组成，分为匹配表达式和动作表达式，即`pattern {action} `组成。
+省略`pattern`表示匹配所有行，`{action}`是可以省略的，表示打印整个行。但是不能同时都省略。
 
-pattern-action直接可以通过换行或分号进行分割。
+AWK会对匹配表达式结果为真的行，执行对应的动作表达式。
 
-`action`表示的是一个表达式序列，一个表达式可以由以下部分组成：
+pattern-action之间通过换行或分号进行分割。
+
+`action`表示的是一个语句序列，一个语句可以由以下部分组成：
+> [  ] 表示可选
+
+- 判断语句: if(表达式) 语句1 [ else 语句2 ]
+- 循环语句: while(表达式) 语句
+- for: for(表达式; 表达式; 表达式) 语句
+- for-in: for(变量 in 数组变量) 语句
+- do-while: do 语句 while(表达式)
+- 中断: break `只能用在 for、for-in、while、do-while里`
+- 继续: continue `只能用在 for、for-in、while、do-while里`
+- 语句: { [语句] } `注意这里有左右大括号`
+- 表达式: 如 age = 33
+- 打印语句: print [ 表达式列表 ] [ > 表达式 ]
+- 格式化: printf 格式串 [ , 表达式类别 ] [ 表达式 ]
+- 返回值: return [表达式]
+- next: next `忽略当前行后续匹配`
+- nextfile: nextfile `跳过当前文件剩余行，打开下一个文件，并从头开始`
+- 删除数组元素: delete 数组名[表达式] `删除数组元素`
+- 删除数组: delete 数组名
+- exit: exit [表达式]
+
+语句之间可以通过换行符、分号、括号进行分割。
+
+获取列表中的tcp状态，并且去掉CLOSE_WAIT,就可以使用以上的delete语句。
 ```
-if( expression ) statement [ else statement ]
-while( expression ) statement
-for( expression ; expression ; expression ) statement
-for( var in array ) statement
-do statement while( expression )
-break
-continue
-{ [ statement ... ] }
-expression              # commonly var = expression
-print [ expression-list ] [ > expression ]
-printf format [ , expression-list ] [ > expression ]
-return [ expression ]
-next                    # skip remaining patterns on this input line
-nextfile                # skip rest of this file, open next, start at top
-delete array[ expression ]# delete an array element
-delete array            # delete all elements of array
-exit [ expression ]     # exit immediately; status is expression
+cat awk/tcp.txt|awk '{all[$6]++}{delete all["CLOSE_WAIT"]} END{for(st in all){print st;}}'
+FIN_WAIT_1
+SYN_SENT
+LAST_ACK
 ```
+
 
 # 内置常量
 - `CONVFMT`
